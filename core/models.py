@@ -58,5 +58,6 @@ class Profile(models.Model):
     ) 
 
     photo = models.ImageField(
-        null=True, blank=True
+        null=True, blank=True,
+        upload_to="profiles"
     )
