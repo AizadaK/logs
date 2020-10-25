@@ -11,6 +11,7 @@ def articles(request):
     all_articles = Article.objects.all()
     return render(request, "articles.html", {"articles" : all_articles})
 
+
 def contacts(request):
     return render(request, "contacts.html")   
 
@@ -20,4 +21,8 @@ def top(request):
 
 def article(request, id):
     article_object = Article.objects.get(id=id)    
+    article_object.views += 1
+    user = request.user
+    article_object.readers.add(user)
+    article_object.save()
     return render(request, "article.html", {"article": article_object})
