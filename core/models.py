@@ -57,3 +57,6 @@ class Profile(models.Model):
         related_name="profile"
     ) 
 
+    photo = models.ImageField(
+        null=True, blank=True
+    )
