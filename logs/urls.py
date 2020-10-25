@@ -24,6 +24,7 @@ urlpatterns = [
     path("articles/", articles, name="articles"),
     path("article/<id>/", article, name="article"),
     path("contacts/", contacts, name="contacts"),
-    path("top/", top, name="top")
+    path("top/", top, name="top"),
+    path("profile/<int:id>/", profile, name="profile")
 
 ]
