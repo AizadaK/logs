@@ -1,9 +1,12 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.http import HttpResponse, Http404
+from django.contrib.auth.decorators import login_required
 from core.models import Article, Profile
 
-def homepage(requiest):
-    return HttpResponse("hi!")
+def homepage(request):
+    # return HttpResponse("hi!")
+    articles = Article.objects.all()
+    return render(request, "homepage.html", {"articles" : articles})
 
 def test(request):
     return render(request, "test.html")
@@ -21,11 +24,20 @@ def top(request):
     return render(request, "top.html", {"article" : article})   
 
 def article(request, id):
-    article_object = Article.objects.get(id=id)    
+    try:
+        article_object = Article.objects.get(id=id) 
+    except Article.DoesNotExist:
+        raise Http404("Такой статьи нет")    
+
+    if request.method == "POST":
+        article_object.delete()
+        return redirect(homepage)  
+
     article_object.views += 1
     user = request.user
-    article_object.readers.add(user)
-    article_object.save()
+    if user.is_authenticated:
+        article_object.readers.add(user)
+        article_object.save()
     return render(request, "article.html", {"article": article_object})
 
 
@@ -33,3 +45,33 @@ def profile(request, id):
     user_profile = Profile.objects.get(id=id)
     context = {"profile": user_profile}
     return render(request, "profile.html", context)
+
+@login_required
+def add(request):
+    if request.method == "GET":
+
+        return render(request, "add.html")
+    elif request.method == "POST": 
+        form = request.POST
+        article = Article(
+            title=form["title"],
+            text=form["text"]
+        )
+        article.save()
+        return redirect(homepage)   
+
+@login_required
+def edit(request, id):
+    article = Article.objects.get(id=id)
+
+    if request.user != article.author:
+        return HttpResponse("Ай ай ай, нельзя так делать!")
+
+    if request.method == "POST":
+        form = request.POST
+        article.text = form["text"]
+        article.title = form["title"]
+        article.save()
+        return redirect("article", id=id)
+    return render(request, "edit.html", {"article": article}) 
+
