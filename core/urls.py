@@ -6,5 +6,6 @@ urlpatterns = [
     path("all/", articles, name="articles"),
     path("add/", add, name="add"),
     path("<id>/", article, name="article"),
+    path("cbv/<pk>/", ArticleDetailView.as_view(), name="article"),
     path("<id>/edit/", edit, name="edit")
 ]
