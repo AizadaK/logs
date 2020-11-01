@@ -57,7 +57,8 @@ class ArticleDetailView(DetailView):
     queryset = Article.objects.all()
 
     def post(self, request, *args, **kwargs):
-        context = self.get_context_data(**kwargs)
+        # context = self.get_context_data(**kwargs)
+        article = Article.objects.get(id=self.kwargs["pk"])
         article = context["article"]
         article.delete()
         return redirect(homepage)
@@ -71,7 +72,15 @@ class ArticleDetailView(DetailView):
         if user.is_authenticated:
             article_object.readers.add(user)
             article_object.save()
-        return self.render_to_response(context)         
+        return self.render_to_response(context)   
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleDetailView, self).get_context_data(**kwargs)
+        context["article"] = Article.objects.get(id=self.kwargs["pk"])
+        context["test"] = 123
+        return context
+
 
 def profile(request, id):
     user_profile = Profile.objects.get(id=id)

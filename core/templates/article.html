@@ -8,7 +8,7 @@
             </a>
         <br>
     {% endif %}
-    Создано: <b>{{ article.created_date }}</b>
+    Создано: <b>{{ article.created_dated }}</b>
     <h3>{{ article.title }}</h3>
     <div>{{ article.text }}</div>
     {% if article.author == request.user %}
