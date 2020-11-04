@@ -25,7 +25,7 @@ SECRET_KEY = 'hzds=vpnnt#tyuxnz8)f9r4+s^j&+^8ewenb374puloiz&ndg-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
