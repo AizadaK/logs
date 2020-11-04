@@ -131,3 +131,6 @@ class FirstUserDetailView(TemplateView):
         kwargs.setdefault('view', self)
         kwargs["my_var"] = User.objects.first()
         return kwargs
+ 
+def all_users(request):
+    return render(request, "users.html", {"users": User.objects.all()}) 
